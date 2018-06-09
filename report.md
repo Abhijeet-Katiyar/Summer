@@ -5,6 +5,55 @@
 
 https://www.nseindia.com/products/content/equities/indices/historical_index_data.htm
 
+# Different types of data
+
++ <u>Cross-sectional data</u>
+
+  Cross-sectional data or cross-section of a population is obtained by taking
+  observations from multiple individuals at the same point in time.
+
++ <u>Time series data</u>
+    
+    a time series is made up of quantitative observations on
+    one or more measurable characteristics of an individual entity and taken at
+    multiple points in time.
++ Panel data
+
+  If we observe multiple entities over multiple
+  points in time we get a panel data also known as longitudinal data.
+
+
+# Internal structures of time series
+
+  A time series can be expressed as $x_t = f_t + s_t + c_t + e_t,$ which is a sum of the trend, seasonal, cyclical, and irregular components in that
+  order.Here, t is the time index at which observations about the series have been
+taken at t = 1,2,3 ...N successive and equally spaced points in time.
+
+  + ***<u>General trend</u>***
+   When a time series exhibits an upward or downward movement in the long run,
+it is said to have a general trend.
+
++ ***<u>Seasonality***</u>
+
+  Seasonality manifests as repetitive and period variations in a time series. In most
+  cases, exploratory data analysis reveals the presence of seasonality.
++ ***<u>Cyclical movements***</u>
+
+  Cyclical changes are movements observed after every few units of time, but they
+occur less frequently than seasonal fluctuations. Unlike seasonality, cyclical
+changes might not have a fixed period of variations.
++ ***<u>Unexpected variations***</u>
+
+  This
+fourth component reflects unexpected variations in the time series. Unexpected
+variations are stochastic and cannot be framed in a mathematical model for a
+definitive future prediction. This type of error is due to lack of information about
+explanatory variables that can model these variations or due to presence of a
+random noise.
+
+
+
+
 
 # Stationary time series
 
