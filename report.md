@@ -1,6 +1,6 @@
 # Dataset
 
-               Nifty50 data from 1-04-2010 to 1-04-2018
+               Nifty50 data from Apr-2010 to Mar-2018
 
 
 https://www.nseindia.com/products/content/equities/indices/historical_index_data.htm
@@ -194,3 +194,105 @@ A seasonal sub series reveals two properties:
 A box plot displays both
 central tendency and dispersion within the seasonal data over a batch of time
 units.Besides, separation between two adjacent box plots reveal the within season variations
+
+
+
+# Auto-Regressive Models
+
+Another very famous approach to regress on time series data is to regress it with
+its lag term. This genre of models is referred to as auto-regressive models (AR
+models). The AR models are very good in capturing trends as the next time
+values are predicted based on the prior time values.Thus AR models are very
+useful in situations where the next forecasted value is a function of the previous
+time period
+
+The auto-regressive model is defined as AR(p), where p refers to the order of the
+AR component.
+
+The first-order AR model is denoted by AR(1):
+> x<sub>t</sub> = ø∈<sub>t-1</sub> + ∈<sub>t</sub>
+
+The second-order AR model is denoted by AR(2):
+> x<sub>t</sub> = ø<sub>1</sub>∈<sub>t-1</sub> + ø<sub>2</sub>∈<sub>t-2</sub> + ∈<sub>t</sub>
+
+
+The p<sup>th</sup> order AR model is denoted by AR(p):
+> x<sub>t</sub> = ø<sub>1</sub>∈<sub>t-1</sub> + ø<sub>2</sub>∈<sub>t-2</sub> + ... + ø<sub>p</sub>∈<sub>t-p</sub> + ∈<sub>t</sub>
+
+Here, ø is the model coefficient, ∈<sub>t</sub> ∼ N (0, σ<sup>2</sup>) is an error in time t, and p is the
+order of the AR model.
+
+# Moving average models
+The moving average models use dependency between residual errors to forecast
+values in the next time period. The model helps you adjust for any unpredictable
+events such as catastrophic events leading to a share market crash leading to
+share prices falling, which will happen over time and is captured as a moving
+average process.
+
+The first-order moving average denoted by MA(1) is as follows:  
+> x<sub>t</sub> = α - θ<sub>1</sub>Є<sub>t-1</sub> + Є<sub>t</sub>
+
+The second-order moving average denoted by MA(2) is as follows:  
+> x<sub>t</sub> = α - θ<sub>1</sub>Є<sub>t-1</sub> - θ<sub>2</sub>Є<sub>t-2</sub>+ Є<sub>t</sub>
+
+The qth order moving average denoted by MA(q) is as follows:
+> x<sub>t</sub> = α - θ<sub>1</sub>Є<sub>t-1</sub> - θ<sub>2</sub>Є<sub>t-2</sub> - ... - θ<sub>q</sub>Є<sub>t-q</sub>+ Є<sub>t</sub>
+
+Here, Є<sub>t</sub> is the identically independently-distributed error at time t and follows
+normal distribution N(0,σ<sup>2</sup><sub>
+Є</sub>) with zero mean and σ<sup>2</sup><sub>
+Є</sub> variance. The Є<sub>t</sub>
+component represents error in time t and the α and Є notations represent mean
+intercept and error coefficients, respectively. The moving average time series
+model with q<sup>th</sup> order is represented as MA(q).
+
+# Building datasets with ARMA
+
+The preceding two sections describe the auto-regressive model AR(p), which
+regresses on its own lagged terms and moving average model MA(q) builds a
+function of error terms of the past. The AR(p) models tend to capture the mean
+reversion effect whereas MA(q) models tend to capture the shock effect in error
+,which are not normal or unpredicted events.
+Thus, the ARMA model combines
+the power of AR and MA components together. An ARMA(p, q) time series
+forecasting model incorporates the pth order AR and qth order MA model,
+respectively.
+
+The ARMA (1, 1) model is represented as follows:
+> x<sub>t</sub> = &alpha; + &straightphi;<sub>1</sub>x<sub>t-1</sub> - &theta;<sub>1</sub>&epsilon;<sub>t-1</sub> + &epsilon;<sub>t</sub>
+
+The ARMA(1, 2) model is denoted as follows:
+> x<sub>t</sub> = &alpha; + &straightphi;<sub>1</sub>x<sub>t-1</sub> - &theta;<sub>1</sub>&epsilon;<sub>t-1</sub> - &theta;<sub>2</sub>&epsilon;<sub>t-2</sub> + &epsilon;<sub>t</sub>
+
+The ARMA(p, q) model is denoted as follows:
+> x<sub>t</sub> = &alpha; + &straightphi;<sub>1</sub>x<sub>t-1</sub> + &straightphi;<sub>2</sub>x<sub>t-2</sub> + ... +  &straightphi;<sub>p</sub>x<sub>t-p</sub> - &theta;<sub>1</sub>&epsilon;<sub>t-1</sub> - &theta;<sub>2</sub>&epsilon;<sub>t-2</sub> - ... - &theta;<sub>q</sub>&epsilon;<sub>t-q</sub> + &epsilon;<sub>t</sub>
+
+Here, Φ and θ represent AR and MA coefficients. The α and εt captures the
+intercept and error at time t. The form gets very complicated as p and q increase;
+thus, lag operators are utilized for a concise representation of ARMA models.
+
+There are multiple
+scenarios to select p and q; some of the thumb rules that can be used to
+determine the order of ARMA components are as follows:
+
++ Autocorrelation is exponentially decreasing and PACF has significant
+correlation at lag 1, then use the p parameter  
+
++ Autocorrelation is forming a sine-wave and PACF has significant
+correlation at lags 1 and 2, then use second-order value for p
++ Autocorrelation has significant autocorrelation and PACF has exponential
+decay, then moving average is present and the q parameter needs to be set
+up
++ Autocorrelation shows significant serial correlation and the PACF shows
+sine-wave pattern, then set up a moving average q parameter
+
+One of the major limitations of these models are that they ignore the volatility
+factor making the signal non-stationary. The AR modeling is under consideration
+process is stationary, that is, error term is IID and follows normal distribution εt
+∼ N(0,σ<sup>2</sup><sub>
+ε</sub>) and |Φ|<1. The |Φ|<1 condition makes the time series a finite time
+series as the effect of more recent observations in time series would be higher as
+compared to prior observations. The series that do not satisfy these assumptions
+fall into non-stationary series.
+
+
