@@ -1,6 +1,6 @@
 # Dataset
 
-               Nifty50 data from Apr-2010 to Mar-2018
+  >             Nifty50 data from Apr-2010 to Mar-2018
 
 
 https://www.nseindia.com/products/content/equities/indices/historical_index_data.htm
@@ -25,7 +25,7 @@ https://www.nseindia.com/products/content/equities/indices/historical_index_data
 
 # Internal structures of time series
 
-  A time series can be expressed as $x_t = f_t + s_t + c_t + e_t,$ which is a sum of the trend, seasonal, cyclical, and irregular components in that
+  A time series can be expressed as $x<sub>t</sub> = f<sub>t</sub> + s<sub>t</sub> + c<sub>t</sub> + e<sub>t</sub>, $ which is a sum of the trend, seasonal, cyclical, and irregular components in that
   order.Here, t is the time index at which observations about the series have been
 taken at t = 1,2,3 ...N successive and equally spaced points in time.
 
@@ -76,10 +76,11 @@ commonly used for verifying non-stationarity in the original time series.
 
 # Augmented Dickey-Fuller test
 
-+ Given an observed time series _**$Y_1,Y_2,Y_3,....,Y_N$**_  ADF Time Series Dickey and Fuller consider three differential-form autoregressive equations to detect the presence of a unit root:
++ Given an observed time series  _**Y<sub>1</sub>,Y<sub>2</sub>,Y<sub>3</sub>,....,Y<sub>N</sub>**_   ADF Time Series Dickey and Fuller consider three differential-form autoregressive equations to detect the presence of a unit root:
 
 
-> $$\triangle Y_t=\gamma Y_t-_1+\sum_{j=1}^{p} (\delta_j\triangle Y_t-_j)+e_t$$
+> ΔY<sub>t</sub> = &gamma;Y<sub>t-1</sub> + &Sigma;(&delta;<sub>j</sub>&Delta;Y<sub>t-j</sub>) + e<sub>t</sub>
+
 
 Where ,
 - t is the time index,
@@ -296,3 +297,26 @@ compared to prior observations. The series that do not satisfy these assumptions
 fall into non-stationary series.
 
 
+# ARIMA
+
+ARIMA, also known as the Box-Jenkins model, is a generalization of the ARMA
+model by including integrated components. The integrated components are
+useful when data has non-stationarity, and the integrated part of ARIMA helps in
+reducing the non-stationarity. The ARIMA applies differencing on time series
+one or more times to remove non-stationarity effect. The ARIMA(p, d, q)
+represent the order for AR, MA, and differencing components. The major
+difference between ARMA and ARIMA models is the d component, which
+updates the series on which forecasting model is built. The d component aims to
+de-trend the signal to make it stationary and ARMA model can be applied to the
+de-trended dataset.For different values of d, the series response changes as
+follows:
++ For d=0: xt =xt
++ For d=1: xt =xt - xt-1
++ For d=2: xt =(xt - xt-1) - (xt-1 - xt-2) = xt- 2xt-1- xt-2
+
+
+As can be seen from the preceding lines, the second difference is not two periods
+ago, rather it is the difference of the first different, that is, d=1. Let's say that
+represents the differenced response and so ARIMA forecasting can be written as
+follows:
+> x<sub>t</sub> = &Phi;<sub>1</sub>x<sub>t-1</sub> + &Phi;<sub>2</sub>x<sub>t-2</sub> + ..... + &Phi;<sub>p</sub>x<sub>t-q</sub> + &theta;<sub>1</sub>&epsilon;<sub>t-1</sub> + &theta;<sub>2</sub>&epsilon;<sub>t-2</sub> + ..... + &theta;<sub>q</sub>&epsilon;<sub>t-q</sub> + &epsilon;<sub>t</sub>
