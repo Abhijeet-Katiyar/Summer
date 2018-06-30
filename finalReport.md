@@ -75,26 +75,70 @@ we can check stationarity using the following:
 1. **<u>Plotting rolling statistics<u>** : we can plot moving mean and moving variance  and see if these terms are varying with time. let's plot the moving average for business week days, business month days , Quarterly and yearly.
 we have .rolling() method in pyhon to calculate rolling statistics.
   +  weekly
+  ```Python
+  plt.plot(Nifty_data.Close,label='Close Prices',color='green')
+plt.plot(Nifty_data['Close'].rolling(window=5).mean(),label='moving avg',color='orange')
+plt.legend()
+plt.title('Weekly rolling statistics')
+plt.show()
+  ```
 
   ![business week days](week.png)
   + Monthly
+  ```python
+  plt.plot(Nifty_data.Close,label='Close Prices',color='green')
+plt.plot(Nifty_data['Close'].rolling(window=21).mean(),label='moving avg',color='orange')
+plt.legend()
+plt.title('Monthly rolling statistics')
+plt.show()
+```
 
   ![monthly](month.png)
 
   + Quarterly
+  ```python
+  plt.plot(Nifty_data.Close,label='Close Prices',color='green')
+plt.plot(Nifty_data['Close'].rolling(window=63).mean(),label='moving avg',color='orange')
+plt.legend()
+plt.title('Quarterly rolling statistics')
+plt.show()
+```
 
   ![Quarterly](Quarterly.png)
 
   + yearly
+  ```Python
+  plt.plot(Nifty_data.Close,label='Close Prices',color='green')
+plt.plot(Nifty_data['Close'].rolling(window=252).mean(),label='moving avg',color='orange')
+plt.legend()
+plt.title('Yearly rolling statistics')
+plt.show()
+```
 
   ![Yearly](Yearly.png)
 
-**<u>Augmented Dickey Fuller test</u>** : This is one of the unit root tests for checking stationarity. In this this test we check for null hypothiesis, where H<sub>0</sub> stats that time series is stationary whereas H<sub>A</sub> stats that time series is not Stationary.
+  *As we can see moving average is changing with time so, Time series is not stationary.*
+
+2. **<u>Augmented Dickey Fuller test</u>** : This is one of the unit root tests for checking stationarity. In this this test we check for null hypothiesis, where H<sub>0</sub> stats that time series is stationary whereas H<sub>A</sub> stats that time series is not Stationary.
 In python we have stattools.adfuller function to check the stationarity of time series.
+```python
+from statsmodels.tsa.stattools import adfuller
+stnry_test=adfuller(Nifty_data['Close'],autolag='AIC')
+stnry_rslt = pd.Series(stnry_test[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
+for key,value in stnry_test[4].items():
+    stnry_rslt['Critical Value (%s)'%key] = value
+print(stnry_rslt)
+if(stnry_test[1]>0.05):
+    print("Time Series is not stationary")
+else:
+    print("Time series is stationary")
+```
+![ADFULLER test](adftst1.png)
 
 **Note - ** if p-value is greater than 0.05 reject null hypothesis.
 
-![Dickey fuller](dkyfllr.png)
+Here, p-value is **0.914701** which is greater than **0.05**.
+Hence it is confirmed that our time series is not stationary.
 
 
 To get stationary time series we need to remove trend and seasonality.
@@ -104,7 +148,7 @@ To get stationary time series we need to remove trend and seasonality.
 A time series can be detrended using following methods -
   + Differencing  
   + Regression
-  + using statistical function
+  + using functions
 
 
 1. **<u>Differencing</u>** :
@@ -117,3 +161,44 @@ x<sub>t</sub> is original time series.
 x<sub>t-1</sub> is time series with lag 1.
 
 In python we have .shift() method to create a series with lag.
+
+```Python
+diff=Nifty_data['Close']-Nifty_data['Close'].shift(1)
+```
+There will be null values because of lag. It is important to remove null values otherwise adfuller test function will show an error i.e. `"SVD did not converge"`
+```Python
+diff.dropna(inplace=True)
+```
+
+*lets plot rolling statistics*
+```Python
+plt.plot(diff,label='differenced timeseries',color='grey')
+plt.plot(diff.rolling(window=252).mean(),label='Moving average',color='red')
+plt.title('weekly rolling statistics on diffrenced time series')
+plt.axhline(y=0,color='green')
+plt.legend()
+plt.show()
+```
+![weekly rolling statistics on diffrenced time series](yearlydifferenced.png)
+
+Now, the moving average is constant.
+
+We can confirm the stationarity by apply Augmented DickeyFullerTest on `diff` time series -
+```Python
+stnry_test_diff=adfuller(diff,autolag='AIC')
+stnry_rslt_diff = pd.Series(stnry_test_diff[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
+for key,value in stnry_test[4].items():
+    stnry_rslt_diff['Critical Value (%s)'%key] = value
+print(stnry_rslt_diff)
+if(stnry_test_diff[1]>0.05):
+    print("Time Series is not stationary")
+else:
+    print("Time series is stationary")
+```
+![ADFULLER test](adfdiff.png)
+
+**p-value is 0.000000 which is less than 0.05.**
+
+So, the time series is now stationary.
+
+This was the first method of making a time series stationary.
