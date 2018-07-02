@@ -201,4 +201,57 @@ else:
 
 So, the time series is now stationary.
 
+The method of differencing discussed above is first order differencing. After applying first order differencing It is possible that the time series may not become stationary then we have to perform second order differencing. To perform second second order differencing, take difference another time.
+> x&prime;<sub>t</sub> - x&prime;<sub>t-1</sub> = (x<sub>t</sub> - x<sub>t-1</sub>) - (x<sub>t-1</sub> - x<sub>t-2</sub>) = x<sub>t</sub> - 2x<sub>t-1</sub> - x<sub>t-2</sub>
+
 This was the first method of making a time series stationary.
+
+
+2. **<u>Using Regression</u>** :
+Regression is another way to detrending timeseries data. Objective of choosing regression over differencing is to get trend line. Trend line can later be used as prediction of long run movement of time series.
+
+Regression analysis is a form of predictive modeling technique which looks into the relationship between a target and predictor variables. Regression analysis is used for forecasting, time series modeling.
+
+Here we fit a trend line to the training data, in such a manner that the distance between data points and trend line is minimum.
+
+lets perform linear regression, but first we have to seperate training data and testing data
+```Python
+# separating training and testing data
+train = Nifty_data['Close'].iloc[:1750]
+test = Nifty_data['Close'].iloc[1751:]
+# building linear model
+import numpy as np
+from sklearn import linear_model
+lm = linear_model.LinearRegression(normalize=True, fit_intercept=True)
+```
+##### Details of parameters :
+1. **Normalize** :
+This parameter is ignored when `fit_intercept` is set to False. If True, the regressors X will be normalized before regression. By default this is set to False.
+2. **fit_intercept** :
+whether to calculate the intercept for this model. If set to False, no intercept will be used in calculations. By default this is set to True.
+
+For more informatin about parameters you can see LinearRegression documentation.
+
+http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html#sklearn.linear_model.LinearRegression
+
+Now we have to fit linear_model to Nifty_data timeseries
+```Python
+lm.fit(np.arange(np.array(len(train.index))).reshape((-1,1)), train)
+```
+Now lets check the accuracy of fitted model
+
+```python
+lm.score(np.arange(np.array(len(train.index))).reshape((-1,1)), train)
+```
+![Train score](train.png)
+
+Now, we are going to plot close prices with trend line
+```python
+plt.plot(Nifty_data['Close'],label='Original data')
+plt.plot(pd.Series(lm.predict(np.arange(np.array(len(Nifty_data.index))).reshape((-1,1))),index=Nifty_data.index),label='Trend line')
+plt.title('Close prices with trend line')
+plt.legend()
+plt.show()
+```
+Output will be -
+![Close prices with trend line](ctrend.png)
