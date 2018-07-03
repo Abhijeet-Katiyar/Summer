@@ -151,7 +151,7 @@ A time series can be detrended using following methods -
   + using functions
 
 
-1. **<u>Differencing</u>** :
+1. **<u>Method to detrening timeseries using Differencing</u>** :
 Differencing is the process of taking difference between successive occurrence  of time series &Delta;x<sub>t</sub> = x<sub>t</sub> - x<sub>t-1</sub>.
 
 Where, &Delta;x<sub>t</sub> is stationary time series.
@@ -207,7 +207,7 @@ The method of differencing discussed above is first order differencing. After ap
 This was the first method of making a time series stationary.
 
 
-2. **<u>Using Regression</u>** :
+2. **<u>Method to detrening timeseries using Regression</u>** :
 Regression is another way to detrending timeseries data. Objective of choosing regression over differencing is to get trend line. Trend line can later be used as prediction of long run movement of time series.
 
 Regression analysis is a form of predictive modeling technique which looks into the relationship between a target and predictor variables. Regression analysis is used for forecasting, time series modeling.
@@ -255,3 +255,44 @@ plt.show()
 ```
 Output will be -
 ![Close prices with trend line](ctrend.png)
+
+
+Now we are going to calculate residuals which will be used later in forecasting
+```python
+Residuals=Nifty_data['Close']-lm.predict(np.arange(np.array(len(Nifty_data.index))).reshape((-1,1)))
+plt.plot(pd.Series(Residuals,index=Nifty_data.index),label=Residuals)
+plt.title('Residuals for Close prices')
+plt.show()
+```
+![Residauls for close prices](Residuals.png)
+
+
+3. **<u>Method to detrending timeseries using Functions</u>** :
+There are many libraries in python which are specially made to perform Statistical operations, one of them is `statsmodels`.
+
+```python
+from statsmodel import seasonal
+decompose = seasonal.seasonal_decompose(Nifty_data['Close'],freq=252)
+```   
+`seasonal_decompose()` method returns,
++ Observed data (i.e. Close prices from `Nifty_data` dataset)
++ Trend components
++ Seasonal components
++ Residauls
+
+We can access Trend, seasonal components and Residuals by `decompose.trend`, `decompose.seasonal`, `decompose.resid` respectively.
+
+**<u>Note</u>** :
+*Because we use 252 as frequency so we will have 252 null values in trend component and in residuals*
+
+```python
+decompose.trend.dropna(inplace=True)
+decompose.resid.dropna(inplace=True)
+```
+Now, we are going to plot trend component.
+
+```python
+decompose.trend,plot()
+```
+
+![Trend Component](trendcompo.png)
