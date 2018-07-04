@@ -144,7 +144,7 @@ Hence it is confirmed that our time series is not stationary.
 To get stationary time series we need to remove trend and seasonality.
 
 
-### **<u>Methods to detrending data</u>** :
+### <center>**<u>Methods to detrending data</u>**</center>
 A time series can be detrended using following methods -
   + Differencing  
   + Regression
@@ -296,3 +296,67 @@ decompose.trend,plot()
 ```
 
 ![Trend Component](trendcompo.png)
+
+We detrended our time series now it's time to remove seasonality.
+
+*while removing trend by using  differencing, seasonality was also removed so if we perform differencing method trend and seasonality both will removed*
+
+*while applying `seasonal_decompose` method we already get the seasonal component.*
+
+so  there is no need to perform any other operation to remove seasonality if we follow differencing or use statsmodels package. If we use regression then we don't get anything related to seasonality. So we have to perform exploratory data analysis through followin plots :
++ Run sequence plot
++ Seasonal subseries plot
++ Multiple box plot
+
+In these plot we will use Residuals -
+```Python
+Residuals = Nifty_data['Close'] - lm.predict(np.arange(np.array(len(Nifty_data.index))).reshape((-1,1)))
+```
+
+# **<u>Run sequence plot</u>** :
+A simple time series plot wit time on x-axis itself reveals following properties :
+1. Movement in mean of series
+2. Shifts in variance
+3. presence of outliers
+
+lets vusualize :
++ Monthly
+```python
+plt.plot(Residuals.rolling(window=21).mean(),label='residual mean')
+plt.plot(Residuals.rolling(window=21).std(),label='residual std')
+plt.plot(Residuals,label='Residuals')
+plt.xlabel('year')
+plt.ylabel('Residuals')
+plt.title('Residuals,Monthly mean and Monthly Std ')
+plt.legend()
+plt.show()
+```
+![Monthly Sequence plot](Monthlyseqplt.png)
+
++ Quarterly
+
+```Python
+plt.plot(Residuals.rolling(window=63).mean(),label='residual mean')
+plt.plot(Residuals.rolling(window=63).std(),label='residual std')
+plt.plot(Residuals,label='Residuals')
+plt.xlabel('year')
+plt.ylabel('Residuals')
+plt.title('Residuals,Quarterly mean and Quarterly Std ')
+plt.legend()
+plt.show()
+```
+![Quarterly Sequence plot](Quarterlyseqplt.png)
+
++ yearly
+
+```python
+plt.plot(Residuals.rolling(window=252).mean(),label='residual mean')
+plt.plot(Residuals.rolling(window=252).std(),label='residual std')
+plt.plot(Residuals,label='Residuals')
+plt.xlabel('year')
+plt.ylabel('Residuals')
+plt.title('Residuals,Yearly mean and Yearly Std ')
+plt.legend()
+plt.show()
+```
+![Yearly sequence plot](Yearlyseqplt.png)
