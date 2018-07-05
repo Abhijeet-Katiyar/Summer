@@ -360,3 +360,63 @@ plt.legend()
 plt.show()
 ```
 ![Yearly sequence plot](Yearlyseqplt.png)
+
+# **<u>Seasonal sub series plot</u>** :
+We can identify seasonality by groping time periods like month,quarter or year. this mothod is only useful when time period of seasonality is known.
+
+before plotting lets add columns for months, quarter and years.
+
++ Adding column "month"   
+```python
+Nifty_data['month']=Nifty_data.index.map(lambda x:x.month)
+```
+
++ Adding column "year"
+```python
+Nifty_data['year']=Nifty_data.index.map(lambda x:x.year)
+```
+
++ Adding column "quarter"
+```Python
+month_quarter_map = {1: 'Q1', 2: 'Q1', 3: 'Q1',
+                     4: 'Q2', 5: 'Q2', 6: 'Q2',
+                     7: 'Q3', 8: 'Q3', 9: 'Q3',
+                     10: 'Q4', 11: 'Q4', 12: 'Q4'
+                    }
+Nifty_data['quarter'] = Nifty_data['month'].map(lambda m: month_quarter_map.get(m))
+```
+
+Now we are going to calculate mean and standard deviation for residuals and making a new subseries. we already calculated residuals while detrending data using regression.
+
++ quarterly
+```python
+# Creating new subseries
+sub_series_quarterly = Nifty_data.groupby(by=['year', 'quarter'])['Residuals'].aggregate([np.mean, np.std])
+sub_series_quarterly.columns = ['Quarterly Mean Close', 'Quarterly Standard Deviation Close']
+#Create row indices of seasonal_sub_series_data using Year & Quarter
+sub_series_quarterly.reset_index(inplace=True)
+sub_series_quarterly.index = sub_series_quarterly['year'].astype(str) + '-' + sub_series_quarterly['quarter']
+```
+Lets have a look to our sub series :
+```Python
+sub_series_quarterly.head()
+```
+![sub series quarterly](sub_series_quarterly.png)
+
+Now we are going to plot it -
+
+```Python
+sub_series_quarterly['Quarterly Mean Close'].plot(color='b')
+plt.title('Quarterly Mean of Residuals')
+plt.xlabel('Time')
+plt.ylabel('Close prices')
+plt.xticks(rotation=30)
+plt.show()
+```
+![Quarterly Mean](Quarterlymean.png)
+
+
+
+
+# **<u>Multiple box plots</u>** :
+Multiple box plots are basically the boxplots of seasonal subseries plots. Box plots are more informative than any simple plot. Box plot revels information like mean, inter quartile range, minimum and maximum value and outliars.
