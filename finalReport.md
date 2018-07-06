@@ -408,12 +408,47 @@ Now we are going to plot it -
 ```Python
 sub_series_quarterly['Quarterly Mean Close'].plot(color='b')
 plt.title('Quarterly Mean of Residuals')
-plt.xlabel('Time')
-plt.ylabel('Close prices')
-plt.xticks(rotation=30)
+plt.ylabel('Residuals')
+plt.show()
+sub_series_quarterly['Quarterly Mean Close'].plot()
+plt.title('Quarterly standard Deviation of Residuals')
 plt.show()
 ```
 ![Quarterly Mean](Quarterlymean.png)
+
+![Quarterly standard Deviation](Quarterlystd.png)
+
++ Monthly
+```Python
+# Creating new subseries
+sub_series_Monthly = Nifty_data.groupby(by=['month'])['Residuals'].aggregate([np.mean, np.std])
+sub_series_Monthly.columns = ['monthly Mean', 'monthly Standard Deviation']
+# plotting sub series
+sub_series_Monthly['monthly Mean'].plot()
+plt.title(Monthly mean of residuals)
+plt.show()
+sub_series_Monthly['monthly standard deviation'].plot()
+plt.title(Monthly mean of residuals)
+plt.show()
+```
+![Monthly mean](monthlymean.png)
+![Monthly standard Deviation](monthlystd.png)
+
++ Yearly
+```Python
+# Creating new subseries
+sub_series_yearly = Nifty_data.groupby(by=['year'])['Residuals'].aggregate([np.mean, np.std])
+sub_series_yearly.columns = ['yearly Mean', 'yearly Standard Deviation']
+# plotting sub series
+sub_series_yearly['yearly Mean'].plot()
+plt.title('yearly mean of residuals')
+plt.show()
+sub_series_yearly['yearly Standard Deviation'].plot()
+plt.title('Yearly Standard Devation of residuals')
+plt.show()
+```
+![Yearly mean](yearlymean.png)
+![Yearly standard Deviation](yearlystd.png)
 
 
 
