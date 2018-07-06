@@ -454,4 +454,46 @@ plt.show()
 
 
 # **<u>Multiple box plots</u>** :
-Multiple box plots are basically the boxplots of seasonal subseries plots. Box plots are more informative than any simple plot. Box plot revels information like mean, inter quartile range, minimum and maximum value and outliars.
+Multiple box plots are basically the boxplots of seasonal subseries plots. Box plots are more informative than any simple plot. Box plot revels information like mean, inter quartile range, minimum and maximum value and outliars, central tendency and dispersion.
+
+For box plots we are going to use `seaborn`.
+
++ Quarterly
+
+```Python
+# Multiple Boxplot(Quarterly)
+import seaborn as sns
+plt.figure(figsize=(5.5, 5.5))
+g = sns.boxplot(data=Nifty_data[['Residuals','quarter']], y=Nifty_data['Residuals'], x=Nifty_data['quarter'])
+g.set_title('Quarterly box plot of Residuals')
+g.set_xlabel('Time')
+g.set_ylabel('Residuals')
+plt.show()
+```
+![Quarterly Box Plot](quarterlybox.png)
+
++ Monthly
+```Python
+# Multiple Boxplot(Monthly)
+import seaborn as sns
+plt.figure(figsize=(5.5, 5.5))
+g = sns.boxplot(data=Nifty_data[['Residuals','month']], y=Nifty_data['Residuals'], x=Nifty_data['month'])
+g.set_title('Monthly box plot of Residuals')
+g.set_xlabel('Time')
+g.set_ylabel('Residuals')
+plt.show()
+```
+![Monthly box plot](monthlybox.png)
+
++ Yearly
+```python
+# Multiple Boxplot(Yearly)
+import seaborn as sns
+plt.figure(figsize=(5.5, 5.5))
+g = sns.boxplot(data=Nifty_data[['Residuals','year']], y=Nifty_data['Residuals'], x=Nifty_data['year'])
+g.set_title('Yearly box plot of Residuals')
+g.set_xlabel('Time')
+g.set_ylabel('Residuals')
+plt.show()
+```
+![Yearly Box plot](yearlybox.png)
