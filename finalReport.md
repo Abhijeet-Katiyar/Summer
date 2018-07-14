@@ -297,13 +297,15 @@ decompose.trend,plot()
 
 ![Trend Component](trendcompo.png)
 
-We detrended our time series now it's time to remove seasonality.
+We detrended our time series now it's time to do work on seasonality.
+
+### **<u>Estimating seasonality</u>**
 
 *while removing trend by using  differencing, seasonality was also removed so if we perform differencing method trend and seasonality both will removed*
 
 *while applying `seasonal_decompose` method we already get the seasonal component.*
 
-so  there is no need to perform any other operation to remove seasonality if we follow differencing or use statsmodels package. If we use regression then we don't get anything related to seasonality. So we have to perform exploratory data analysis through followin plots :
+so  there is no need to perform any other operation to remove seasonality if we follow differencing or use statsmodels package. If we use regression then we don't get anything related to seasonality. So we have to perform exploratory data analysis through following plots :
 + Run sequence plot
 + Seasonal subseries plot
 + Multiple box plot
@@ -497,3 +499,129 @@ g.set_ylabel('Residuals')
 plt.show()
 ```
 ![Yearly Box plot](yearlybox.png)
+
+
+These are the methods to estimating seasonality.
+*****************************************************************
+# <center><u>Forecasting</u></center>
+
+For Time series forecasting ARIMA model is popular and widely used statistical method.
+ARIMA is an acronym of AutoRegressive Integrated Moving Average. It is generalization of AutoRegressive Moving Average and differencing.
++ **AR** *(AutoRegression)*: This technique can be used on time series where output variable depends on its own previous values.
+
++ **I** *(integrated)* : This is order of differencing to make time series stationary.  
+
++ **MA** *(Moving Average)* : A model that analyze data points by creating series of averages of subsets of data.
+
+The ARIMA(p,d,q) represents th order of AR term, Differencing order and MA term respectively
+
+To find the value of p and q we will plot autocorrelation and partial autocorrelation functions.
+
+```Python
+from statsmodels.tsa.stattools import acf, pacf
+# ACF plot
+lag_acf=acf(diff,nlags=20)
+lag_pacf=pacf(diff,nlag=20,method='ols')
+# plot ACF
+plt.plot(lag_acf)
+plt.axhline(y=0,linestyle='--',color='gray')
+plt.axhline(y=-1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
+plt.axhline(y=1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
+plt.title('Autocorrelation Function')
+plt.show()
+# plot PACF
+plt.plot(lag_pacf)
+plt.axhline(y=0,linestyle='--',color='gray')
+plt.axhline(y=-1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
+plt.axhline(y=1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
+plt.title('Partial Autocorrelation Function')
+plt.show()
+```
+![Autocorrelation](ACF.png)
+![Partial Autocorrelation](PACF.png)
+
+In these plots we draw th dotted line at y=0 and confidence intervals (dotted lines).
+1. The value of p will be the lag value where the PACF chart crosses the upper confidence interval for the first time. In our plot it is 2.
+2. The value of q will be the lag value where the ACF chart crosses the upper confidence interval for the first time. In our plot it is also 2.
+
+TIme series forecasting can be done in two ways :
+  1. We can calculate fittedvalues from model and take it back to original time series scale
+  2. Use .forecast() function on ARIMAresults, which performs one step forcast using the model.
+
+### Forecasting without using .forecast() function
+
+```Python
+from statsmodels.tsa.arima_model import ARIMA
+# seperating training and testing data
+train=Nifty_data['Close'].iloc[:1750]
+test=Nifty_data['Close'].iloc[1751:]
+# Building ARIMA model
+model = ARIMA(Nifty_data['Close'], order=(2, 1, 2))  
+results_ARIMA = model.fit()
+
+# taking it back to original scale
+predict_Arima=pd.Series(results_ARIMA_2.fittedvalues, copy=True)
+predict_Arima.head()
+```
+![predict_Arima.head()](Arima_head.png)
+
+The first element of our original time series is lost because we took a lag by 1.
+to convert the differencing to log scale we will first determine the cumulative sum at index and then add it to the base number.
+```Python
+predict_Arima_cumsum=predict_Arima.cumsum()
+predict_Arima_data=pd.Series(data.iloc[0], index=data.index)
+predict_Arima_data=predict_Arima_data.add(predict_Arima_cumsum,fill_value=0)
+predict_Arima_data.head()
+```
+![predict_Arima_data.head()](predict_ARIMA_data_head.png)
+
+Now the series is on its original scale.
+
+```Python
+plt.plot(Nifty_data['Close'],label='Close prices')
+plt.plot(predict_Arima_data,label='predicted values')
+plt.legend()
+plt.show()
+```
+![figure](original_scale.png)
+
+code to calculate score -
+```Python
+import sklearn.metrics
+sklearn.metrics.r2_score(data,predict_Arima_data)
+```
+The score is : 0.7398187397952602
+
+### Forecasting using .forecast() function
+
+```Python
+training_set = [x for x in train]
+predictions = []
+for t in range(len(test)):
+    model = ARIMA(training_set, order=(2,1,2))
+    model_fit = model.fit()
+    output = model_fit.forecast()
+    predictions.append(output[0])
+    obs = test[t]
+    training_set.append(obs)
+    print('predicted=%f, expected=%f' % (output[0], obs))
+```
+Sample of output is :
+![Sample output](sample.png)
+
+Plot of predicted values with test data :
+```Python
+pred=pd.Series(predictions,index=test.index)
+plt.plot(test,label='Test data')
+plt.plot(pred, color='red',label='Predicted values')
+plt.title('Test data VS. Predicted values')
+plt.legend()
+plt.show()
+```
+![Forecasted](Forecasted.png)
+
+R2 Score -
+```python
+sklearn.metrics.r2_score(test,pred)
+```
+The Score is : 0.9777090172770078
