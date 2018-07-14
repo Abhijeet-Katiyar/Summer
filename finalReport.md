@@ -271,7 +271,7 @@ plt.show()
 There are many libraries in python which are specially made to perform Statistical operations, one of them is `statsmodels`.
 
 ```python
-from statsmodel import seasonal
+from statsmodels.tsa import seasonal
 decompose = seasonal.seasonal_decompose(Nifty_data['Close'],freq=252)
 ```   
 `seasonal_decompose()` method returns,
@@ -292,7 +292,9 @@ decompose.resid.dropna(inplace=True)
 Now, we are going to plot trend component.
 
 ```python
-decompose.trend,plot()
+decompose.trend.plot()
+plt.title('Trend Component')
+plt.show()
 ```
 
 ![Trend Component](trendcompo.png)
@@ -366,7 +368,11 @@ plt.show()
 # **<u>Seasonal sub series plot</u>** :
 We can identify seasonality by groping time periods like month,quarter or year. this mothod is only useful when time period of seasonality is known.
 
-before plotting lets add columns for months, quarter and years.
+before plotting lets add columns for Residuals, months, quarter and years.
++ Adding column "Residuals"
+```Python
+Nifty_data['Residuals']=Residuals
+```
 
 + Adding column "month"   
 ```python
@@ -427,10 +433,10 @@ sub_series_Monthly = Nifty_data.groupby(by=['month'])['Residuals'].aggregate([np
 sub_series_Monthly.columns = ['monthly Mean', 'monthly Standard Deviation']
 # plotting sub series
 sub_series_Monthly['monthly Mean'].plot()
-plt.title(Monthly mean of residuals)
+plt.title('Monthly mean of residuals')
 plt.show()
-sub_series_Monthly['monthly standard deviation'].plot()
-plt.title(Monthly mean of residuals)
+sub_series_Monthly['monthly Standard Deviation'].plot()
+plt.title('Monthly Standard Deviation of residuals')
 plt.show()
 ```
 ![Monthly mean](monthlymean.png)
@@ -521,19 +527,19 @@ To find the value of p and q we will plot autocorrelation and partial autocorrel
 from statsmodels.tsa.stattools import acf, pacf
 # ACF plot
 lag_acf=acf(diff,nlags=20)
-lag_pacf=pacf(diff,nlag=20,method='ols')
+lag_pacf=pacf(diff,nlags=20,method='ols')
 # plot ACF
 plt.plot(lag_acf)
 plt.axhline(y=0,linestyle='--',color='gray')
-plt.axhline(y=-1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
-plt.axhline(y=1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
+plt.axhline(y=-1.96/np.sqrt(len(diff)),linestyle='--',color='gray')
+plt.axhline(y=1.96/np.sqrt(len(diff)),linestyle='--',color='gray')
 plt.title('Autocorrelation Function')
 plt.show()
 # plot PACF
 plt.plot(lag_pacf)
 plt.axhline(y=0,linestyle='--',color='gray')
-plt.axhline(y=-1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
-plt.axhline(y=1.96/np.sqrt(len(data_diff)),linestyle='--',color='gray')
+plt.axhline(y=-1.96/np.sqrt(len(diff)),linestyle='--',color='gray')
+plt.axhline(y=1.96/np.sqrt(len(diff)),linestyle='--',color='gray')
 plt.title('Partial Autocorrelation Function')
 plt.show()
 ```
@@ -560,7 +566,7 @@ model = ARIMA(Nifty_data['Close'], order=(2, 1, 2))
 results_ARIMA = model.fit()
 
 # taking it back to original scale
-predict_Arima=pd.Series(results_ARIMA_2.fittedvalues, copy=True)
+predict_Arima=pd.Series(results_ARIMA.fittedvalues, copy=True)
 predict_Arima.head()
 ```
 ![predict_Arima.head()](Arima_head.png)
@@ -569,7 +575,7 @@ The first element of our original time series is lost because we took a lag by 1
 to convert the differencing to log scale we will first determine the cumulative sum at index and then add it to the base number.
 ```Python
 predict_Arima_cumsum=predict_Arima.cumsum()
-predict_Arima_data=pd.Series(data.iloc[0], index=data.index)
+predict_Arima_data=pd.Series(Nifty_data['Close'].iloc[0], index=Nifty_data.index)
 predict_Arima_data=predict_Arima_data.add(predict_Arima_cumsum,fill_value=0)
 predict_Arima_data.head()
 ```
@@ -588,7 +594,7 @@ plt.show()
 code to calculate score -
 ```Python
 import sklearn.metrics
-sklearn.metrics.r2_score(data,predict_Arima_data)
+sklearn.metrics.r2_score(Nifty_data['Close'],predict_Arima_data)
 ```
 The score is : 0.7398187397952602
 
