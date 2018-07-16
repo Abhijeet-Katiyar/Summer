@@ -569,7 +569,7 @@ results_ARIMA = model.fit()
 predict_Arima=pd.Series(results_ARIMA.fittedvalues, copy=True)
 predict_Arima.head()
 ```
-![predict_Arima.head()](Arima_head.png)
+![predict_Arima.head()](Arima_head.PNG)
 
 The first element of our original time series is lost because we took a lag by 1.
 to convert the differencing to log scale we will first determine the cumulative sum at index and then add it to the base number.
@@ -579,7 +579,7 @@ predict_Arima_data=pd.Series(Nifty_data['Close'].iloc[0], index=Nifty_data.index
 predict_Arima_data=predict_Arima_data.add(predict_Arima_cumsum,fill_value=0)
 predict_Arima_data.head()
 ```
-![predict_Arima_data.head()](predict_ARIMA_data_head.png)
+![predict_Arima_data.head()](predict_ARIMA_data_head.PNG)
 
 Now the series is on its original scale.
 
@@ -613,7 +613,7 @@ for t in range(len(test)):
     print('predicted=%f, expected=%f' % (output[0], obs))
 ```
 Sample of output is :
-![Sample output](sample.png)
+![Sample output](sample.PNG)
 
 Plot of predicted values with test data :
 ```Python
