@@ -243,7 +243,7 @@ Now lets check the accuracy of fitted model
 ```python
 lm.score(np.arange(np.array(len(train.index))).reshape((-1,1)), train)
 ```
-![Train score](train.png)
+![Train score](train.PNG)
 
 Now, we are going to plot close prices with trend line
 ```python
