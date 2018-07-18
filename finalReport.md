@@ -603,18 +603,19 @@ The score is : 0.7398187397952602
 ```Python
 training_set = [x for x in train]
 predictions = []
-for t in range(len(test)):
+for i in range(len(test)):
     model = ARIMA(training_set, order=(2,1,2))
     model_fit = model.fit()
     output = model_fit.forecast()
     predictions.append(output[0])
-    obs = test[t]
+    obs = test[i]
     training_set.append(obs)
     print('predicted=%f, expected=%f' % (output[0], obs))
 ```
 Sample of output is :
+<center>
 ![Sample output](sample.PNG)
-
+</center>
 Plot of predicted values with test data :
 ```Python
 pred=pd.Series(predictions,index=test.index)
