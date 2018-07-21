@@ -151,7 +151,7 @@ A time series can be detrended using following methods -
   + using functions
 
 
-1. **<u>Method to detrening timeseries using Differencing</u>** :
+1. **<u>Method to detrending timeseries using Differencing</u>** :
 Differencing is the process of taking difference between successive occurrence  of time series &Delta;x<sub>t</sub> = x<sub>t</sub> - x<sub>t-1</sub>.
 
 Where, &Delta;x<sub>t</sub> is stationary time series.
@@ -174,12 +174,12 @@ diff.dropna(inplace=True)
 ```Python
 plt.plot(diff,label='differenced timeseries',color='grey')
 plt.plot(diff.rolling(window=252).mean(),label='Moving average',color='red')
-plt.title('weekly rolling statistics on diffrenced time series')
+plt.title('Yearly rolling statistics on diffrenced time series')
 plt.axhline(y=0,color='green')
 plt.legend()
 plt.show()
 ```
-![weekly rolling statistics on diffrenced time series](yearlydifferenced.png)
+![Yearly rolling statistics on differenced time series](yearlydifferenced.png)
 
 Now, the moving average is constant.
 
@@ -201,7 +201,7 @@ else:
 
 So, the time series is now stationary.
 
-The method of differencing discussed above is first order differencing. After applying first order differencing It is possible that the time series may not become stationary then we have to perform second order differencing. To perform second second order differencing, take difference another time.
+The method of differencing discussed above is first order differencing. After applying first order differencing It is possible that the time series may not become stationary then we have to perform second order differencing. To perform second order differencing, take difference another time.
 > x&prime;<sub>t</sub> - x&prime;<sub>t-1</sub> = (x<sub>t</sub> - x<sub>t-1</sub>) - (x<sub>t-1</sub> - x<sub>t-2</sub>) = x<sub>t</sub> - 2x<sub>t-1</sub> - x<sub>t-2</sub>
 
 This was the first method of making a time series stationary.
@@ -214,7 +214,7 @@ Regression analysis is a form of predictive modeling technique which looks into 
 
 Here we fit a trend line to the training data, in such a manner that the distance between data points and trend line is minimum.
 
-lets perform linear regression, but first we have to seperate training data and testing data
+lets perform linear regression, but first we have to separate training data and testing data
 ```Python
 # separating training and testing data
 train = Nifty_data['Close'].iloc[:1750]
@@ -230,7 +230,7 @@ This parameter is ignored when `fit_intercept` is set to False. If True, the reg
 2. **fit_intercept** :
 whether to calculate the intercept for this model. If set to False, no intercept will be used in calculations. By default this is set to True.
 
-For more informatin about parameters you can see LinearRegression documentation.
+For more information about parameters you can see LinearRegression documentation.
 
 http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html#sklearn.linear_model.LinearRegression
 
@@ -264,7 +264,7 @@ plt.plot(pd.Series(Residuals,index=Nifty_data.index),label=Residuals)
 plt.title('Residuals for Close prices')
 plt.show()
 ```
-![Residauls for close prices](Residuals.png)
+![Residuals for close prices](Residuals.png)
 
 
 3. **<u>Method to detrending timeseries using Functions</u>** :
@@ -278,7 +278,7 @@ decompose = seasonal.seasonal_decompose(Nifty_data['Close'],freq=252)
 + Observed data (i.e. Close prices from `Nifty_data` dataset)
 + Trend components
 + Seasonal components
-+ Residauls
++ Residuals
 
 We can access Trend, seasonal components and Residuals by `decompose.trend`, `decompose.seasonal`, `decompose.resid` respectively.
 
@@ -323,7 +323,7 @@ A simple time series plot wit time on x-axis itself reveals following properties
 2. Shifts in variance
 3. presence of outliers
 
-lets vusualize :
+lets viusualize :
 + Monthly
 ```python
 plt.plot(Residuals.rolling(window=21).mean(),label='residual mean')
@@ -366,7 +366,7 @@ plt.show()
 ![Yearly sequence plot](Yearlyseqplt.png)
 
 # **<u>Seasonal sub series plot</u>** :
-We can identify seasonality by groping time periods like month,quarter or year. this mothod is only useful when time period of seasonality is known.
+We can identify seasonality by groping time periods like month, quarter or year. this method is only useful when time period of seasonality is known.
 
 before plotting lets add columns for Residuals, months, quarter and years.
 + Adding column "Residuals"
@@ -462,7 +462,7 @@ plt.show()
 
 
 # **<u>Multiple box plots</u>** :
-Multiple box plots are basically the boxplots of seasonal subseries plots. Box plots are more informative than any simple plot. Box plot revels information like mean, inter quartile range, minimum and maximum value and outliars, central tendency and dispersion.
+Multiple box plots are basically the boxplots of seasonal subseries plots. Box plots are more informative than any simple plot. Box plot revels information like mean, inter quartile range, minimum and maximum value and outliers, central tendency and dispersion.
 
 For box plots we are going to use `seaborn`.
 
@@ -519,7 +519,7 @@ ARIMA is an acronym of AutoRegressive Integrated Moving Average. It is generaliz
 
 + **MA** *(Moving Average)* : A model that analyze data points by creating series of averages of subsets of data.
 
-The ARIMA(p,d,q) represents th order of AR term, Differencing order and MA term respectively
+The ARIMA(p,d,q) represents the order of AR term, Differencing order and MA term respectively
 
 To find the value of p and q we will plot autocorrelation and partial autocorrelation functions.
 
@@ -546,12 +546,12 @@ plt.show()
 ![Autocorrelation](ACF.png)
 ![Partial Autocorrelation](PACF.png)
 
-In these plots we draw th dotted line at y=0 and confidence intervals (dotted lines).
+In these plots we draw the dotted line at y=0 and confidence intervals (dotted lines).
 1. The value of p will be the lag value where the PACF chart crosses the upper confidence interval for the first time. In our plot it is 2.
 2. The value of q will be the lag value where the ACF chart crosses the upper confidence interval for the first time. In our plot it is also 2.
 
-TIme series forecasting can be done in two ways :
-  1. We can calculate fittedvalues from model and take it back to original time series scale
+Time series forecasting can be done in two ways :
+  1. We can calculate fitted values from model and take it back to original time series scale
   2. Use .forecast() function on ARIMAresults, which performs one step forcast using the model.
 
 ### Forecasting without using .forecast() function
