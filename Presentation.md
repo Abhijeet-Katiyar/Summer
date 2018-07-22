@@ -18,6 +18,18 @@ The **Nifty50** data that used is Time series data from **APR-2010** to **MAR-20
 
 A Time series is a combination of General trend, Seasonality, Cyclic movements and Unexpected variations.
 
++ A timeseries can be expressed as x<sub>t</sub> = f<sub>t</sub> + s<sub>t</sub> + c<sub>t</sub> + e<sub>t</sub>
+
+Where,
+
++  f<sub>t</sub> is Trend component 
++  s<sub>t</sub> is Seasonal component
++  c<sub>t</sub> is cyclic component
++  e<sub>t</sub> is irregular component
++  t is the time index at which observations about the series have been taken
+
+---
+
 + <u>**General Trend**</u> : When there is Upward or downward movement present in data in a long run, is Known as general trend.
 ![Close prices](closeprices.png)
 ---
@@ -66,9 +78,10 @@ A timeseries is known as stationary when it is free from Trend and seasonility. 
 
 ---
 
-+ **<u>Regression</u>** : Regression is useful to find trend line and to remove trend component, take difference between original time series and trend line. after removing trend we will get Residuals.
++ **<u>Regression</u>** : Regression is useful to find trend line and to remove trend component, take difference between original time series and trend line.
 ![Close prices with trend line](ctrend.png)
 ---
++  After removing trend we will get Residuals.
 ![Residauls for close prices](Residuals.png)
 
 ---
