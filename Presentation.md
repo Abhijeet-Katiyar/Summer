@@ -1,3 +1,11 @@
+<center><u>Tools Used</center></u>
+===
+1. *Programming language* : **Python**
+2. *Libraries* : **pandas**, **numpy**, **matplotlib**, **statsmodels**, **sklearn**, **seaborn** 
+3. **Jupyter notebook** 
+4. **Git bash** and **Github**
+
+---
 <center><u>**Introduction**</u></center>
 ================================
 
