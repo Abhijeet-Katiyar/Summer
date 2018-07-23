@@ -111,6 +111,7 @@ Value of p and q is selected by autocorrelation plot partial autocorrelation plo
 
 
 ---
++ After fitting model  .forecast() method is used.
 ![Forecasted](Forecasted.png)
 
 ---
