@@ -98,4 +98,25 @@ There are many Statistical models for timeseries forecasting. Among them ARIMA i
 + **<u>Differencing</u>** : Integration or differencing makes series sattionary.
 + **<u>Moving Average</u>** : This model analyze data points by creating series of averages of subsets of data.
 ---
+
++ ARIMA models are generally denoted by ARIMA(p,d,q)  
+where,
++ p is order(no. of time lags) of Autoregressive term.
++ d is the order of differencing(the number of times the data have had past values subtracted).
++ q is the order of moving average model.
+
+Value of p and q is selected by autocorrelation plot partial autocorrelation plot.
++ The value of p will be the lag value where the PACF chart crosses the upper confidence interval for the first time.
++ The value of q will be the lag value where the ACF chart crosses the upper confidence interval for the first time. 
+
+
+---
 ![Forecasted](Forecasted.png)
+
+---
+
++ The accuracy of ARIMA model depends on the value of r<sup>2</sup>. 
++ In statistics r<sup>2</sup> is known as cofficient of determination which is square of correlation Coefficient. 
++ Best possible r<sup>2</sup> can be 1.0
++ r<sup>2</sup> can be negative because the model can be worse.
++ In python r<sup>2</sup> can be calculated usong `.r2_score()` method which is present in `sklearn.metrics` package.
