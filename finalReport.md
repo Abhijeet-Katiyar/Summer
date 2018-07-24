@@ -312,6 +312,8 @@ so  there is no need to perform any other operation to remove seasonality if we 
 + Seasonal subseries plot
 + Multiple box plot
 
+> **To remove Seasonality, simply take average of detrended data for specific season.** 
+
 In these plot we will use Residuals -
 ```Python
 Residuals = Nifty_data['Close'] - lm.predict(np.arange(np.array(len(Nifty_data.index))).reshape((-1,1)))
