@@ -2,8 +2,8 @@
 ===
 1. *Programming language* : **Python**
 2. *Libraries* : **pandas**, **numpy**, **matplotlib**, **statsmodels**, **sklearn**, **seaborn** 
-3. **Jupyter notebook** 
-4. **Git bash** and **Github**
+4. **Jupyter notebook** 
+5. **Git bash** and **Github**
 
 ---
 <center><u>**Introduction**</u></center>
@@ -15,11 +15,18 @@
 + <u>**Timeseries data**</u> : Timeseries data can obtained by taking multiple observations from same source at different points of time.
 + <u>**Panel data**</u> : Panel data is collection of multiple observations over multiple points in time. It is combination of cross-sectional data and Time-series data. 
 
-The **Nifty50** data that used is Time series data from **APR-2010** to **MAR-2018**.
+---
+## <u>Introduction of dataset</u> :
 
+![info results](Nifty_data.info.png)
++ The **Nifty50** data that used is Time series data from **APR-2010** to **MAR-2018**.
++ In this dataset we have 
+    -   DatetimeIndex
+    -   6 columns
+    - 1987 entries in each column 
+    - No null values
 
 ---
-
 
 <center><u>Internal structure of time series</u></center>
 ====
@@ -96,6 +103,14 @@ A timeseries is known as stationary when it is free from Trend and seasonility. 
 
 +  **<u>Statistical function</u>** : In python a function named `seasonal_decompose` is present in library `statsmodels.tsa.seasonal` which separate Observed data(i.e. original data), trend component, seasonal component and residuals. 
 ![Trend Component](trendcompo.png)
+---
+<center><u>Remove seasonality</center></u>
+===
++ While removing trend by using differencing, seasonality was also removed.
++ `seasonal_decompose()` function return seasonal component also that can be access by `Result.seasonal`.
++ To remove seasonality, if regression is used to detrending data, take average of detrended data for specific season.
+
+
 ---
 <center><u>Forecasting</u></center>
 ===
