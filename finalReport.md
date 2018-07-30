@@ -312,7 +312,7 @@ so  there is no need to perform any other operation to remove seasonality if we 
 + Seasonal subseries plot
 + Multiple box plot
 
-> **To remove Seasonality, simply take average of detrended data for specific season.** 
+> **To remove Seasonality, simply take average of detrended data for specific season.**
 
 In these plot we will use Residuals -
 ```Python
@@ -615,10 +615,15 @@ for i in range(len(test)):
     print('predicted=%f, expected=%f' % (output[0], obs))
 ```
 Sample of output is :
+
 <center>
+
 ![Sample output](sample.PNG)
+
 </center>
+
 Plot of predicted values with test data :
+
 ```Python
 pred=pd.Series(predictions,index=test.index)
 plt.plot(test,label='Test data')
