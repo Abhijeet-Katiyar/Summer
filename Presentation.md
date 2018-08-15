@@ -25,7 +25,7 @@
 + In this dataset we have
     -   DatetimeIndex
     -   6 columns
-    - 1987 entries in each columns
+    - 1987 entries in each column
     - No null values
 
 ---
